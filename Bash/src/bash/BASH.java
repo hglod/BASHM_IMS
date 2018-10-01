@@ -8,7 +8,7 @@ import java.sql.ResultSet;
  
 public class BASH {
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
        
     try {
         String host = "jdbc:derby://localhost:1527/Parts";
@@ -20,15 +20,16 @@ public class BASH {
         String SQL = "SELECT * FROM INVENTORY";
         ResultSet rs = stmt.executeQuery(SQL);
         
-        rs.next( );
+    while (rs.next()) {
         int id_col = rs.getInt("ID");
         String price = rs.getString("Price");
         String quant = rs.getString("Quantity");
         String date = rs.getString("Purchase_Date");
         String des = rs.getString("Description");
         
-        System.out.println( id_col + " " + price + " " + quant + " " + date + " " 
-        + des);
+        String p = id_col + " " + price + " " + quant + " " + date + " " + des;
+        System.out.println(p);
+    }
     }
     
     catch ( SQLException err ) {
@@ -37,3 +38,4 @@ public class BASH {
     }
     
 }
+
