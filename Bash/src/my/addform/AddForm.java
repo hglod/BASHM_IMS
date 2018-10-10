@@ -5,13 +5,12 @@
  */
 package my.addform;
 
-import java.sql.Array;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.ResultSet;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -22,7 +21,7 @@ import static my.addform.ConnectJava.ConnectDB;
 public class AddForm extends javax.swing.JFrame {
 
     
-    Connection conn;
+    
     
   
             
@@ -30,7 +29,7 @@ public class AddForm extends javax.swing.JFrame {
     public AddForm() {
        
         initComponents();
-        ConnectDB();
+       
         
     }
     
@@ -232,6 +231,10 @@ public class AddForm extends javax.swing.JFrame {
            pstmt.setString(4, pd);
            pstmt.setString(5, des); 
            pstmt.executeUpdate();
+           JOptionPane.showMessageDialog(null, "Data Saved");
+           
+            
+            
            
           } catch(SQLException sqle) {
             sqle.printStackTrace();
@@ -247,7 +250,7 @@ public class AddForm extends javax.swing.JFrame {
        sqle.printStackTrace();
    }
        
-           
+        
          
  
             
