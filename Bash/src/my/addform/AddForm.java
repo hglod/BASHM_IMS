@@ -246,6 +246,7 @@ public class AddForm extends javax.swing.JFrame {
    try {
       con.close();
       pstmt.close();
+      this.dispose();
    } catch(SQLException sqle) {
        sqle.printStackTrace();
    }
