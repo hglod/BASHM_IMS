@@ -9,6 +9,9 @@ import java.sql.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import my.editform.editform;
+import my.addform.AddForm;
+
 /**
  *
  * @author Hunter
@@ -56,6 +59,11 @@ public class formUI extends javax.swing.JFrame {
         });
 
         jButton2.setText("Edit Item");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Delete Item");
 
@@ -76,13 +84,14 @@ public class formUI extends javax.swing.JFrame {
                 "#", "ID", "Quantity", "Price", "Purchase_Date", "Description"
             }
         ));
+        inventoryTable.setEnabled(false);
         jScrollPane1.setViewportView(inventoryTable);
 
         javax.swing.GroupLayout jTablePanelLayout = new javax.swing.GroupLayout(jTablePanel);
         jTablePanel.setLayout(jTablePanelLayout);
         jTablePanelLayout.setHorizontalGroup(
             jTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 598, Short.MAX_VALUE)
+            .addGap(0, 608, Short.MAX_VALUE)
             .addGroup(jTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jTablePanelLayout.createSequentialGroup()
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -91,7 +100,7 @@ public class formUI extends javax.swing.JFrame {
         );
         jTablePanelLayout.setVerticalGroup(
             jTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 299, Short.MAX_VALUE)
+            .addGap(0, 309, Short.MAX_VALUE)
             .addGroup(jTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jTablePanelLayout.createSequentialGroup()
                     .addContainerGap()
@@ -170,9 +179,19 @@ public class formUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+             // For add item button:
+        setVisible(false);
+        new AddForm().setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+            // For edit item button:
+        setVisible(false);
+        new editform().setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -236,7 +255,7 @@ public class formUI extends javax.swing.JFrame {
                 Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Parts", "parts", "password");
                 Statement myStatement = conn.createStatement();
                 ResultSet mySet = myStatement.executeQuery("select * from INVENTORY");
-                DefaultTableModel myModel = new DefaultTableModel(new String[]{"#", "ID", "Quantity", "Price", "Purchase_Date","Description"}, count);
+                DefaultTableModel myModel = new DefaultTableModel(new String[]{"#", "ID", "Quantity", "Price", "Purchase Date","Description"}, count);
             while (mySet.next()) {
                 String ID, Quantity, Price, Purchase_Date, Description;
                 int rowNumber = count;
