@@ -70,6 +70,11 @@ public class formUI extends javax.swing.JFrame {
         jTextField1.setToolTipText("");
 
         jButton4.setText("Search");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jButton5.setText("Refresh");
 
@@ -91,7 +96,7 @@ public class formUI extends javax.swing.JFrame {
         jTablePanel.setLayout(jTablePanelLayout);
         jTablePanelLayout.setHorizontalGroup(
             jTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 608, Short.MAX_VALUE)
+            .addGap(0, 612, Short.MAX_VALUE)
             .addGroup(jTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jTablePanelLayout.createSequentialGroup()
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -100,7 +105,7 @@ public class formUI extends javax.swing.JFrame {
         );
         jTablePanelLayout.setVerticalGroup(
             jTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 309, Short.MAX_VALUE)
+            .addGap(0, 315, Short.MAX_VALUE)
             .addGroup(jTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jTablePanelLayout.createSequentialGroup()
                     .addContainerGap()
@@ -189,6 +194,35 @@ public class formUI extends javax.swing.JFrame {
         setVisible(false);
         new editform().setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+      try{
+         Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Parts", "parts", "password");
+         Statement stmt = (Statement) con.createStatement();
+         
+         
+         String ID = jTextField1.getText();
+         
+        
+         
+         String SQL = "SELECT * FROM INVENTORY WHERE ID='" + ID + "'" ;
+         
+         
+         ResultSet rs = stmt.executeQuery(SQL);
+         
+         
+         while(rs.next())  {
+             System.out.println("ID"+ rs.getString("ID") + "Quantity:" + rs.getString("QUANTITY") + rs.getString("Purchase_Date"));
+             
+         }
+        
+      }catch(Exception e) {
+          System.out.println("Error: " + e.getMessage());
+         
+      }
+        
+        
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     
     
