@@ -5,10 +5,14 @@
  */
 package my.formui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import my.loginform.login2;
 
 /**
@@ -35,30 +39,19 @@ public class employeeform extends javax.swing.JFrame {
 
         jButton6 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        inventoryTable = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jTablePanel = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        inventoryTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jButton6.setText("Inventory Report");
 
         jTextField1.setToolTipText("");
-
-        inventoryTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"hi", null, null, null, null, null},
-                {"hi", null, null, null, null, null}
-            },
-            new String [] {
-                "#", "ID", "Quantity", "Price", "Purchase_Date", "Description"
-            }
-        ));
-        inventoryTable.setEnabled(false);
-        jScrollPane1.setViewportView(inventoryTable);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("BASHM Inventory Management");
@@ -79,6 +72,39 @@ public class employeeform extends javax.swing.JFrame {
             }
         });
 
+        inventoryTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"hi", null, null, null, null, null},
+                {"hi", null, null, null, null, null}
+            },
+            new String [] {
+                "#", "ID", "Quantity", "Price", "Purchase_Date", "Description"
+            }
+        ));
+        inventoryTable.setEnabled(false);
+        jScrollPane1.setViewportView(inventoryTable);
+
+        javax.swing.GroupLayout jTablePanelLayout = new javax.swing.GroupLayout(jTablePanel);
+        jTablePanel.setLayout(jTablePanelLayout);
+        jTablePanelLayout.setHorizontalGroup(
+            jTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 608, Short.MAX_VALUE)
+            .addGroup(jTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jTablePanelLayout.createSequentialGroup()
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 578, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap()))
+        );
+        jTablePanelLayout.setVerticalGroup(
+            jTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 309, Short.MAX_VALUE)
+            .addGroup(jTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jTablePanelLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -87,20 +113,20 @@ public class employeeform extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 299, Short.MAX_VALUE)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton8)
-                        .addContainerGap())
+                        .addComponent(jButton8))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton6)
                             .addComponent(jButton1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 578, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30))))
+                        .addGap(81, 81, 81)
+                        .addComponent(jTablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -125,9 +151,9 @@ public class employeeform extends javax.swing.JFrame {
                         .addGap(46, 46, 46)
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(48, Short.MAX_VALUE))
+                        .addGap(27, 27, 27)
+                        .addComponent(jTablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton1, jButton6});
@@ -211,6 +237,44 @@ public class employeeform extends javax.swing.JFrame {
     private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel jTablePanel;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
+
+    
+    public class jTableWork implements ActionListener {
+       int count = 0;
+       public void jTableSub() {
+           jTablePanel.setVisible(false);
+           jButton6.addActionListener(this);
+       }
+
+        public void actionPerformed(ActionEvent e) {
+           jTablePanel.setVisible(true);
+            try {
+                Class.forName("org.apache.derby.jdbc.ClientDriver");
+                Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Parts", "parts", "password");
+                Statement myStatement = conn.createStatement();
+                ResultSet mySet = myStatement.executeQuery("select * from INVENTORY");
+                DefaultTableModel myModel = new DefaultTableModel(new String[]{"#", "ID", "Quantity", "Price", "Purchase Date","Description"}, count);
+            while (mySet.next()) {
+                String ID, Quantity, Price, Purchase_Date, Description;
+                int rowNumber = count;
+                ID = mySet.getString(1);
+                Quantity = mySet.getString(2);
+                Price = mySet.getString(3);
+                Purchase_Date = mySet.getString(4);
+                Description = mySet.getString(5);
+                myModel.addRow(new Object[] {rowNumber, ID, Quantity, Price, Purchase_Date, Description});
+               inventoryTable.setModel(myModel);
+               count +=1;
+            }
+
+        } catch (Exception d){
+            JOptionPane.showMessageDialog(null, d);
+         }
+      }
+   }
+
+
 }
