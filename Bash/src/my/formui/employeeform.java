@@ -146,25 +146,15 @@ public class employeeform extends javax.swing.JFrame {
          Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Parts", "parts", "password");
          Statement stmt = (Statement) con.createStatement();
          
-         
          String ID = jTextField1.getText();
-         
-        
-         
          String SQL = "SELECT * FROM INVENTORY WHERE ID='" + ID + "'" ;
-         
-         
          ResultSet rs = stmt.executeQuery(SQL);
-         
          
          while(rs.next())  {
              System.out.println("ID"+ rs.getString("ID") + "Quantity:" + rs.getString("QUANTITY") + rs.getString("Purchase_Date"));
-             
          }
-        
       }catch(Exception e) {
           System.out.println("Error: " + e.getMessage());
-         
       }
     }//GEN-LAST:event_jButton4ActionPerformed
 

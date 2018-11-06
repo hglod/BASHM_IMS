@@ -20,9 +20,15 @@ import my.loginform.login2;
 public class formUI extends javax.swing.JFrame {
     /**
      * Creates new form formUI
+     * @param access
      */
-    public formUI() {
+    public formUI(int access) {
         initComponents();
+        if (access == 0) {
+            jButton1.setVisible(false);
+            jButton2.setVisible(false);
+            jButton3.setVisible(false);
+        }
         jTableWork tableConstructor = new jTableWork();
         tableConstructor.jTableSub();
     }
@@ -225,30 +231,18 @@ public class formUI extends javax.swing.JFrame {
          Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Parts", "parts", "password");
          Statement stmt = (Statement) con.createStatement();
          
-         
          String ID = jTextField1.getText();
-         
-        
-         
          String SQL = "SELECT * FROM INVENTORY WHERE ID='" + ID + "'" ;
-         
-         
          ResultSet rs = stmt.executeQuery(SQL);
-         
          
          while(rs.next())  {
              System.out.println("ID"+ rs.getString("ID") + "Quantity:" + rs.getString("QUANTITY") + rs.getString("Purchase_Date"));
-             
          }
-        
       }catch(Exception e) {
           System.out.println("Error: " + e.getMessage());
-         
       }
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    
-    
     /**
      * @param args the command line arguments
      */
@@ -279,7 +273,7 @@ public class formUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new formUI().setVisible(true);
+                new formUI(1).setVisible(true);
             }
         });
     }

@@ -159,7 +159,7 @@ public class login2 extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(Arrays.equals(jPasswordField1.getPassword(), new char[]{'p','a','s','s','w','o','r','d'})){
             setVisible(false);
-            new formUI().setVisible(true);
+            new formUI(1).setVisible(true);
         }else
             JOptionPane.showMessageDialog(null, "Incorrect Password");
         
@@ -168,7 +168,7 @@ public class login2 extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         setVisible(false);
-        new employeeform().setVisible(true);
+        new formUI(0).setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
