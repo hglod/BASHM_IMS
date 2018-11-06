@@ -236,7 +236,7 @@ public class formUI extends javax.swing.JFrame {
          ResultSet rs = stmt.executeQuery(SQL);
          
          while(rs.next())  {
-             System.out.println("ID"+ rs.getString("ID") + "Quantity:" + rs.getString("QUANTITY") + rs.getString("Purchase_Date"));
+            JOptionPane.showMessageDialog(null, "ID"+ rs.getString("ID") + "Quantity:" + rs.getString("QUANTITY") + rs.getString("Purchase_Date"));
          }
       }catch(Exception e) {
           System.out.println("Error: " + e.getMessage());
