@@ -8,7 +8,6 @@ import java.awt.event.*;
 import java.sql.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 import my.editform.editform;
 import my.addform.AddForm;
 
@@ -24,6 +23,8 @@ public class formUI extends javax.swing.JFrame {
         initComponents();
         jTableWork tableConstructor = new jTableWork();
         tableConstructor.jTableSub();
+        deleteEntry deleteMyEntry = new deleteEntry();
+        deleteMyEntry.deleteEntrySub();
     }
 
     /**
@@ -77,15 +78,41 @@ public class formUI extends javax.swing.JFrame {
 
         inventoryTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"hi", null, null, null, null, null},
-                {"hi", null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
                 "#", "ID", "Quantity", "Price", "Purchase_Date", "Description"
             }
-        ));
-        inventoryTable.setEnabled(false);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(inventoryTable);
+        if (inventoryTable.getColumnModel().getColumnCount() > 0) {
+            inventoryTable.getColumnModel().getColumn(0).setResizable(false);
+            inventoryTable.getColumnModel().getColumn(1).setResizable(false);
+            inventoryTable.getColumnModel().getColumn(2).setResizable(false);
+            inventoryTable.getColumnModel().getColumn(3).setResizable(false);
+            inventoryTable.getColumnModel().getColumn(4).setResizable(false);
+            inventoryTable.getColumnModel().getColumn(5).setResizable(false);
+        }
 
         javax.swing.GroupLayout jTablePanelLayout = new javax.swing.GroupLayout(jTablePanel);
         jTablePanel.setLayout(jTablePanelLayout);
@@ -182,14 +209,15 @@ public class formUI extends javax.swing.JFrame {
              // For add item button:
         setVisible(false);
         new AddForm().setVisible(true);
+        jButton6.setEnabled(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
             // For edit item button:
         setVisible(false);
         new editform().setVisible(true);
+        jButton6.setEnabled(true);
     }//GEN-LAST:event_jButton2ActionPerformed
-
     
     
     /**
@@ -246,6 +274,7 @@ public class formUI extends javax.swing.JFrame {
        public void jTableSub() {
            jTablePanel.setVisible(false);
            jButton6.addActionListener(this);
+           
        }
 
         public void actionPerformed(ActionEvent e) {
@@ -265,13 +294,51 @@ public class formUI extends javax.swing.JFrame {
                 Purchase_Date = mySet.getString(4);
                 Description = mySet.getString(5);
                 myModel.addRow(new Object[] {rowNumber, ID, Quantity, Price, Purchase_Date, Description});
-               inventoryTable.setModel(myModel);
-               count +=1;
+                inventoryTable.setModel(myModel);
+                count +=1;
+                jButton6.setEnabled(false);
             }
-
         } catch (Exception d){
             JOptionPane.showMessageDialog(null, d);
+        }
+    }
+}
+    
+public class deleteEntry implements ActionListener {
+    public void deleteEntrySub() {
+        jButton3.addActionListener(this);
+        ((DefaultTableModel)inventoryTable.getModel()).addTableModelListener(inventoryTable);
+    }
+    public void actionPerformed(ActionEvent arg0) {
+      Connection conn = null;
+      PreparedStatement pstmt = null; 
+        // check for selected row first
+        if (inventoryTable.getSelectedRow() > -1) {
+                int myInt = (int) inventoryTable.getSelectedRow();
+                String myInt2 = (inventoryTable.getModel().getValueAt(myInt, 1)).toString();
+           String response = JOptionPane.showInputDialog("Are you sure you want to delete this entry? Press y to confirmed or n to cancel").toLowerCase().trim();
+           if ("y".equals(response) || "yes".equals(response)) {
+               try {
+                Class.forName("org.apache.derby.jdbc.ClientDriver");
+                conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Parts", "parts", "password");
+
+                ((DefaultTableModel)inventoryTable.getModel()).removeRow(myInt);
+                ((DefaultTableModel)inventoryTable.getModel()).fireTableDataChanged();
+                pstmt = conn.prepareStatement("DELETE FROM INVENTORY WHERE ID = ?");
+                pstmt.setInt(1, Integer.parseInt(myInt2));
+                pstmt.executeUpdate();
+               } catch(Exception errorInUpdate) {
+                   JOptionPane.showMessageDialog(null, "Error in updating database");
+               }
+               JOptionPane.showMessageDialog(null, "You have deleted an an entry.");
+           } else if ("n".equals(response) || "no".equals(response)) {
+               JOptionPane.showMessageDialog(null,"You have not deleted an entry.");
+           } else {
+               JOptionPane.showMessageDialog(null,"You need to use y or n to confirm or deny the deletion.");
+           }
+         } else {
+            JOptionPane.showMessageDialog(null,"You need to select something for deletion.");
          }
-      }
-   }
+        }        
+    }
 }
