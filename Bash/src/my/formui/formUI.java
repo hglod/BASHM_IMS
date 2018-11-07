@@ -107,7 +107,7 @@ public class formUI extends javax.swing.JFrame {
         jTablePanel.setLayout(jTablePanelLayout);
         jTablePanelLayout.setHorizontalGroup(
             jTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 608, Short.MAX_VALUE)
+            .addGap(0, 612, Short.MAX_VALUE)
             .addGroup(jTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jTablePanelLayout.createSequentialGroup()
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -116,7 +116,7 @@ public class formUI extends javax.swing.JFrame {
         );
         jTablePanelLayout.setVerticalGroup(
             jTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 309, Short.MAX_VALUE)
+            .addGap(0, 315, Short.MAX_VALUE)
             .addGroup(jTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jTablePanelLayout.createSequentialGroup()
                     .addContainerGap()
@@ -132,6 +132,11 @@ public class formUI extends javax.swing.JFrame {
         });
 
         jButton8.setText("Search by Desc.");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -232,17 +237,37 @@ public class formUI extends javax.swing.JFrame {
          Statement stmt = (Statement) con.createStatement();
          
          String ID = jTextField1.getText();
-         String SQL = "SELECT * FROM INVENTORY WHERE ID='" + ID + "'" ;
+         String SQL = "SELECT * FROM INVENTORY WHERE ID LIKE '%" + ID + "%'";
          ResultSet rs = stmt.executeQuery(SQL);
          
          while(rs.next())  {
-            JOptionPane.showMessageDialog(null, "ID"+ rs.getString("ID") + "Quantity:" + rs.getString("QUANTITY") + rs.getString("Purchase_Date"));
+            JOptionPane.showMessageDialog(null, "ID: " + rs.getString("ID") + "\n" + "Quantity: " + rs.getString("QUANTITY") + "\n" + 
+                    "Purchase Date: " + rs.getString("Purchase_Date") + "\n" + "Price: " + rs.getString("Price") + "\n" + "Description: " + 
+                    rs.getString("Description"));
          }
       }catch(Exception e) {
           System.out.println("Error: " + e.getMessage());
       }
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        try{
+         Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Parts", "parts", "password");
+         Statement stmt = (Statement) con.createStatement();
+         
+         String des = jTextField1.getText();
+         String SQL = "SELECT * FROM INVENTORY WHERE DESCRIPTION LIKE '%" + des + "%'";
+         ResultSet rs = stmt.executeQuery(SQL);
+         
+         while(rs.next())  {
+            JOptionPane.showMessageDialog(null, "ID: " + rs.getString("ID") + "\n" + "Quantity: " + rs.getString("QUANTITY") + "\n" + 
+                    "Purchase Date: " + rs.getString("Purchase_Date") + "\n" + "Price: " + rs.getString("Price") + "\n" + "Description: " + 
+                    rs.getString("Description"));
+         }
+      }catch(Exception e) {
+          System.out.println("Error: " + e.getMessage());
+    }//GEN-LAST:event_jButton8ActionPerformed
+    }
     /**
      * @param args the command line arguments
      */
