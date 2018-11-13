@@ -132,6 +132,11 @@ public class formUI extends javax.swing.JFrame {
         });
 
         jButton8.setText("Search by Desc.");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -227,21 +232,42 @@ public class formUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        try{
+   try{
          Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Parts", "parts", "password");
          Statement stmt = (Statement) con.createStatement();
          
          String ID = jTextField1.getText();
-         String SQL = "SELECT * FROM INVENTORY WHERE ID='" + ID + "'" ;
+         String SQL = "SELECT * FROM INVENTORY WHERE ID LIKE '%" + ID + "%'";
          ResultSet rs = stmt.executeQuery(SQL);
          
          while(rs.next())  {
-             System.out.println("ID"+ rs.getString("ID") + "Quantity:" + rs.getString("QUANTITY") + rs.getString("Purchase_Date"));
+            JOptionPane.showMessageDialog(null, "ID: " + rs.getString("ID") + "\n" + "Quantity: " + rs.getString("QUANTITY") + "\n" + 
+                    "Purchase Date: " + rs.getString("Purchase_Date") + "\n" + "Price: " + rs.getString("Price") + "\n" + "Description: " + 
+                    rs.getString("Description"));
          }
       }catch(Exception e) {
           System.out.println("Error: " + e.getMessage());
       }
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        try{
+         Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Parts", "parts", "password");
+         Statement stmt = (Statement) con.createStatement();
+         
+         String des = jTextField1.getText();
+         String SQL = "SELECT * FROM INVENTORY WHERE DESCRIPTION LIKE '%" + des + "%'";
+         ResultSet rs = stmt.executeQuery(SQL);
+         
+         while(rs.next())  {
+            JOptionPane.showMessageDialog(null, "ID: " + rs.getString("ID") + "\n" + "Quantity: " + rs.getString("QUANTITY") + "\n" + 
+                    "Purchase Date: " + rs.getString("Purchase_Date") + "\n" + "Price: " + rs.getString("Price") + "\n" + "Description: " + 
+                    rs.getString("Description"));
+         }
+      }catch(Exception e) {
+          System.out.println("Error: " + e.getMessage());
+    } 
+     }//GEN-LAST:event_jButton8ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -326,4 +352,42 @@ public class formUI extends javax.swing.JFrame {
          }
       }
    }
+    
+    public class deleteEntry implements ActionListener {
+    public void deleteEntrySub() {
+        jButton3.addActionListener(this);
+        ((DefaultTableModel)inventoryTable.getModel()).addTableModelListener(inventoryTable);
+    }
+    public void actionPerformed(ActionEvent arg0) {
+      Connection conn = null;
+      PreparedStatement pstmt = null; 
+        // check for selected row first
+        if (inventoryTable.getSelectedRow() > -1) {
+                int myInt = (int) inventoryTable.getSelectedRow();
+                String myInt2 = (inventoryTable.getModel().getValueAt(myInt, 1)).toString();
+           String response = JOptionPane.showInputDialog("Are you sure you want to delete this entry? Press y to confirmed or n to cancel").toLowerCase().trim();
+           if ("y".equals(response) || "yes".equals(response)) {
+               try {
+                Class.forName("org.apache.derby.jdbc.ClientDriver");
+                conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Parts", "parts", "password");
+
+                ((DefaultTableModel)inventoryTable.getModel()).removeRow(myInt);
+                ((DefaultTableModel)inventoryTable.getModel()).fireTableDataChanged();
+                pstmt = conn.prepareStatement("DELETE FROM INVENTORY WHERE ID = ?");
+                pstmt.setInt(1, Integer.parseInt(myInt2));
+                pstmt.executeUpdate();
+               } catch(Exception errorInUpdate) {
+                   JOptionPane.showMessageDialog(null, "Error in updating database");
+               }
+               JOptionPane.showMessageDialog(null, "You have deleted an an entry.");
+           } else if ("n".equals(response) || "no".equals(response)) {
+               JOptionPane.showMessageDialog(null,"You have not deleted an entry.");
+           } else {
+               JOptionPane.showMessageDialog(null,"You need to use y or n to confirm or deny the deletion.");
+           }
+         } else {
+            JOptionPane.showMessageDialog(null,"You need to select something for deletion.");
+         }
+        }        
+    }
 }
