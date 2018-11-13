@@ -213,12 +213,14 @@ public class formUI extends javax.swing.JFrame {
              // For add item button:
         setVisible(false);
         new AddForm().setVisible(true);
+                jButton6.setEnabled(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
             // For edit item button:
         setVisible(false);
         new editform().setVisible(true);
+        jButton6.setEnabled(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -345,6 +347,7 @@ public class formUI extends javax.swing.JFrame {
                 myModel.addRow(new Object[] {rowNumber, ID, Quantity, Price, Purchase_Date, Description});
                inventoryTable.setModel(myModel);
                count +=1;
+                jButton6.setEnabled(false);               
             }
 
         } catch (Exception d){

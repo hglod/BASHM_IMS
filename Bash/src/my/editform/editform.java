@@ -4,6 +4,14 @@
  * and open the template in the editor.
  */
 package my.editform;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import my.addform.AddForm;
 import my.formui.formUI;
 
 /**
@@ -199,7 +207,45 @@ public class editform extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+          Connection con = null;
+      PreparedStatement pstmt = null; 
+     
+       try {
+           String id = jTextField1.getText();
+           String quant = jTextField3.getText();
+           String price = jFormattedTextField1.getText();
+           String pd = jFormattedTextField2.getText();
+           String des = jTextField2.getText();
+           Class.forName("org.apache.derby.jdbc.ClientDriver");
+           Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Parts", "parts", "password");
+           pstmt = conn.prepareStatement("UPDATE INVENTORY SET(id, quant, price, pd, des) WHERE (ID, QUANTITY, PRICE, PURCHASE_DATE, DESCRIPTION) VALUES (?, ?, ?, ?, ?)");
+
+           pstmt.setString(1, id);
+           pstmt.setString(2, quant);
+           pstmt.setString(3, price);
+           pstmt.setString(4, pd);
+           pstmt.setString(5, des); 
+           pstmt.executeUpdate();
+           JOptionPane.showMessageDialog(null, "Data Saved");
+           
+            
+            
+           
+          } catch(SQLException sqle) {
+            sqle.printStackTrace();
+          } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AddForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       finally{
+    
+   try {
+      con.close();
+      pstmt.close();
+      this.dispose();
+   } catch(SQLException sqle) {
+       sqle.printStackTrace();
+   }
+       }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
