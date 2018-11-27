@@ -8,7 +8,6 @@ import java.awt.event.*;
 import java.sql.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 import my.editform.editform;
 import my.addform.AddForm;
 import my.loginform.login2;
@@ -18,10 +17,16 @@ import my.loginform.login2;
  * @author Hunter
  */
 public class formUI extends javax.swing.JFrame {
+    static String selRow;
+    static String selDate;
+    static String selPrice;
+    static String selQuantity;
+    static String selDescription;
     /**
      * Creates new form formUI
-     * @param access
+     * @return 
      */
+    
     public formUI(int access) {
         initComponents();
         if (access == 0) {
@@ -31,6 +36,8 @@ public class formUI extends javax.swing.JFrame {
         }
         jTableWork tableConstructor = new jTableWork();
         tableConstructor.jTableSub();
+        deleteEntry newDelete = new deleteEntry();
+        newDelete.deleteEntrySub();
     }
 
     /**
@@ -100,7 +107,6 @@ public class formUI extends javax.swing.JFrame {
                 "#", "ID", "Quantity", "Price", "Purchase_Date", "Description"
             }
         ));
-        inventoryTable.setEnabled(false);
         jScrollPane1.setViewportView(inventoryTable);
 
         javax.swing.GroupLayout jTablePanelLayout = new javax.swing.GroupLayout(jTablePanel);
@@ -213,16 +219,38 @@ public class formUI extends javax.swing.JFrame {
              // For add item button:
         setVisible(false);
         new AddForm().setVisible(true);
+        jButton6.setEnabled(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-            // For edit item button:
-        setVisible(false);
-        new editform().setVisible(true);
+        try {
+            int selRow = inventoryTable.getSelectedRow();
+            String selRow2 = (inventoryTable.getModel().getValueAt(selRow, 1)).toString();
+            String myQuantity, myPrice, myDate, myDescription;
+            myQuantity =(inventoryTable.getModel().getValueAt(selRow, 2)).toString();
+            myPrice = (inventoryTable.getModel().getValueAt(selRow, 3)).toString();
+            myDate = (inventoryTable.getModel().getValueAt(selRow, 4)).toString();
+            myDescription = (inventoryTable.getModel().getValueAt(selRow, 5)).toString();
+            this.selRow = selRow2;
+            this.selQuantity = myQuantity;
+            this.selPrice = myPrice;
+            this.selDate = myDate;
+            this.selDescription = myDescription;
+            setVisible(false);
+            new editform().setVisible(true);            // For edit item button:
+
+            if (selRow != -1) {
+                setVisible(false);
+                new editform().setVisible(true);
+            }
+
+        } catch(Exception d) {
+            JOptionPane.showMessageDialog(null, "Please select a row to edit.");
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+        jButton6.setEnabled(false);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -300,12 +328,32 @@ public class formUI extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new formUI(1).setVisible(true);
+                
             }
         });
-    }
 
+    }
+        public static String getRow() {
+            return selRow;
+        }
+        
+        public static String getQuantity() {
+            return selQuantity;
+        }
+        
+        public static String getPrice() {
+            return selPrice;
+        }
+        
+        public static String getDate() {
+            return selDate;
+        }
+        
+        public static String getDescription() {
+            return selDescription;
+        }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable inventoryTable;
+    public javax.swing.JTable inventoryTable;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -327,14 +375,18 @@ public class formUI extends javax.swing.JFrame {
        }
 
         public void actionPerformed(ActionEvent e) {
-           jTablePanel.setVisible(true);
+           jTablePanel.setVisible(true);   
             try {
                 Class.forName("org.apache.derby.jdbc.ClientDriver");
                 Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Parts", "parts", "password");
                 Statement myStatement = conn.createStatement();
                 ResultSet mySet = myStatement.executeQuery("select * from INVENTORY");
-                DefaultTableModel myModel = new DefaultTableModel(new String[]{"#", "ID", "Quantity", "Price", "Purchase Date","Description"}, count);
-            while (mySet.next()) {
+                DefaultTableModel myModel = new DefaultTableModel(new String[]{"#", "ID", "Quantity", "Price", "Purchase Date","Description"}, count) {              
+                public boolean isCellEditable(int row, int col) {
+                    return false;
+                }
+            };
+                while (mySet.next()) {
                 String ID, Quantity, Price, Purchase_Date, Description;
                 int rowNumber = count;
                 ID = mySet.getString(1);
@@ -343,14 +395,13 @@ public class formUI extends javax.swing.JFrame {
                 Purchase_Date = mySet.getString(4);
                 Description = mySet.getString(5);
                 myModel.addRow(new Object[] {rowNumber, ID, Quantity, Price, Purchase_Date, Description});
-               inventoryTable.setModel(myModel);
-               count +=1;
-            }
-
-        } catch (Exception d){
+                inventoryTable.setModel(myModel);
+                count +=1;    
+           }          
+         } catch (Exception d){
             JOptionPane.showMessageDialog(null, d);
          }
-      }
+      }    
    }
     
     public class deleteEntry implements ActionListener {
@@ -365,12 +416,11 @@ public class formUI extends javax.swing.JFrame {
         if (inventoryTable.getSelectedRow() > -1) {
                 int myInt = (int) inventoryTable.getSelectedRow();
                 String myInt2 = (inventoryTable.getModel().getValueAt(myInt, 1)).toString();
-           String response = JOptionPane.showInputDialog("Are you sure you want to delete this entry? Press y to confirmed or n to cancel").toLowerCase().trim();
+                String response = JOptionPane.showInputDialog("Are you sure you want to delete the item on row #" + (myInt + 1) + " with ID #" + myInt2 + "? Press y to confirm or n to cancel").toLowerCase().trim();
            if ("y".equals(response) || "yes".equals(response)) {
                try {
                 Class.forName("org.apache.derby.jdbc.ClientDriver");
                 conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Parts", "parts", "password");
-
                 ((DefaultTableModel)inventoryTable.getModel()).removeRow(myInt);
                 ((DefaultTableModel)inventoryTable.getModel()).fireTableDataChanged();
                 pstmt = conn.prepareStatement("DELETE FROM INVENTORY WHERE ID = ?");
@@ -378,16 +428,16 @@ public class formUI extends javax.swing.JFrame {
                 pstmt.executeUpdate();
                } catch(Exception errorInUpdate) {
                    JOptionPane.showMessageDialog(null, "Error in updating database");
-               }
+               }         
                JOptionPane.showMessageDialog(null, "You have deleted an an entry.");
            } else if ("n".equals(response) || "no".equals(response)) {
                JOptionPane.showMessageDialog(null,"You have not deleted an entry.");
            } else {
                JOptionPane.showMessageDialog(null,"You need to use y or n to confirm or deny the deletion.");
            }
-         } else {
+           } else {
             JOptionPane.showMessageDialog(null,"You need to select something for deletion.");
          }
-        }        
+       }        
     }
 }
