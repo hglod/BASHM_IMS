@@ -8,6 +8,7 @@ package my.loginform;
 import java.util.Arrays;
 import javax.swing.JOptionPane;
 import my.formui.formUI;
+import my.formui.passwordform;
 
 /**
  * Not changed in edit update
@@ -159,10 +160,17 @@ public class login2 extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+    JOptionPane.showMessageDialog(null, "password is now: " + Arrays.toString(passwordform.password));
+        
         if(Arrays.equals(jPasswordField1.getPassword(), new char[]{'p','a','s','s','w','o','r','d'})){
             setVisible(false);
             new formUI(1).setVisible(true);
-        }else
+        }
+        else if (Arrays.equals(jPasswordField1.getPassword(), passwordform.password)) {
+              setVisible(false);
+            new formUI(1).setVisible(true);
+        }
+            else
             JOptionPane.showMessageDialog(null, "Incorrect Password");
         
     }//GEN-LAST:event_jButton2ActionPerformed
