@@ -236,9 +236,6 @@ public class formUI extends javax.swing.JFrame {
             this.selPrice = myPrice;
             this.selDate = myDate;
             this.selDescription = myDescription;
-            setVisible(false);
-            new editform().setVisible(true);            // For edit item button:
-
             if (selRow != -1) {
                 setVisible(false);
                 new editform().setVisible(true);
@@ -413,31 +410,33 @@ public class formUI extends javax.swing.JFrame {
       Connection conn = null;
       PreparedStatement pstmt = null; 
         // check for selected row first
-        if (inventoryTable.getSelectedRow() > -1) {
-                int myInt = (int) inventoryTable.getSelectedRow();
-                String myInt2 = (inventoryTable.getModel().getValueAt(myInt, 1)).toString();
-                String response = JOptionPane.showInputDialog("Are you sure you want to delete the item on row #" + (myInt + 1) + " with ID #" + myInt2 + "? Press y to confirm or n to cancel").toLowerCase().trim();
-           if ("y".equals(response) || "yes".equals(response)) {
-               try {
-                Class.forName("org.apache.derby.jdbc.ClientDriver");
-                conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Parts", "parts", "password");
-                ((DefaultTableModel)inventoryTable.getModel()).removeRow(myInt);
-                ((DefaultTableModel)inventoryTable.getModel()).fireTableDataChanged();
-                pstmt = conn.prepareStatement("DELETE FROM INVENTORY WHERE ID = ?");
-                pstmt.setInt(1, Integer.parseInt(myInt2));
-                pstmt.executeUpdate();
-               } catch(Exception errorInUpdate) {
-                   JOptionPane.showMessageDialog(null, "Error in updating database");
-               }         
-               JOptionPane.showMessageDialog(null, "You have deleted an an entry.");
-           } else if ("n".equals(response) || "no".equals(response)) {
-               JOptionPane.showMessageDialog(null,"You have not deleted an entry.");
-           } else {
-               JOptionPane.showMessageDialog(null,"You need to use y or n to confirm or deny the deletion.");
-           }
-           } else {
-            JOptionPane.showMessageDialog(null,"You need to select something for deletion.");
-         }
-       }        
+
+                        try {
+                            if (inventoryTable.getSelectedRow() > -1) {
+                            int myInt = (int) inventoryTable.getSelectedRow();
+                            String myInt2 = (inventoryTable.getModel().getValueAt(myInt, 1)).toString();
+                            String response = JOptionPane.showInputDialog("Are you sure you want to delete the item on row #" + (myInt) + " with ID #" + myInt2 + "? Press y to confirm or n to cancel").toLowerCase().trim();
+                            if ("y".equals(response) || "yes".equals(response)) {
+                            Class.forName("org.apache.derby.jdbc.ClientDriver");
+                            conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Parts", "parts", "password");
+                            ((DefaultTableModel)inventoryTable.getModel()).removeRow(myInt);
+                            ((DefaultTableModel)inventoryTable.getModel()).fireTableDataChanged();
+                            pstmt = conn.prepareStatement("DELETE FROM INVENTORY WHERE ID = ?");
+                            pstmt.setInt(1, Integer.parseInt(myInt2));
+                            pstmt.executeUpdate();
+                            JOptionPane.showMessageDialog(null, "You have deleted an an entry.");
+                                } else if ("n".equals(response) || "no".equals(response)) {
+                                    JOptionPane.showMessageDialog(null,"You have not deleted an entry.");
+                                } else {
+                                    JOptionPane.showMessageDialog(null,"You need to use y or n to confirm or deny the deletion.");
+                                }
+          
+                        } else {
+                             JOptionPane.showMessageDialog(null,"You need to select something for deletion.");
+                          }       
+                            } catch(Exception e) {
+                   JOptionPane.showMessageDialog(null, "Cancelled deletion.");
+               }  
+      }
     }
 }

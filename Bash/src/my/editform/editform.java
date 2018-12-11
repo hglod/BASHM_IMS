@@ -34,7 +34,6 @@ public class editform extends javax.swing.JFrame {
       jTextField4.setText(myPrice);
       jTextField5.setText(myDate);
       jTextField2.setText(myDescription);
-
     }
 
     /**
@@ -217,49 +216,75 @@ public class editform extends javax.swing.JFrame {
       */   
       
       String myRow = formUI.getRow();
-      String myQuantity = formUI.getQuantity();
-      String myPrice = formUI.getPrice();
-      String myDate = formUI.getDate();
-      String myDescription = formUI.getDescription();
       Connection con = null;
       PreparedStatement pstmt = null; 
-      jTextField1.setText(myRow);
-      jTextField3.setText(myQuantity);
-      jTextField4.setText(myPrice);
-      jTextField5.setText(myDate);
-      jTextField2.setText(myDescription);
       /**
        * Grammar fixed in the code for delete as well.
        */
-      String response = JOptionPane.showInputDialog("Are you sure you want to edit item ID #" + myRow + "? Press y to confirm or n to cancel").toLowerCase().trim();
-           if ("y".equals(response) || "yes".equals(response)) {
        try {
-           Class.forName("org.apache.derby.jdbc.ClientDriver");
-           con = DriverManager.getConnection("jdbc:derby://localhost:1527/Parts", "parts", "password");
-           pstmt = con.prepareStatement("UPDATE INVENTORY SET id = ?, quantity = ?, price = ?, purchase_date = ?, description = ? WHERE id = ?");
-           pstmt.setString(1, jTextField1.getText());
-           pstmt.setString(2, jTextField3.getText());
-           pstmt.setString(3, jTextField4.getText());
-           pstmt.setString(4, jTextField5.getText());
-           pstmt.setString(5, jTextField2.getText()); 
-           pstmt.setString(6, myRow);
-           pstmt.executeUpdate();
-           JOptionPane.showMessageDialog(null, "Data Saved");
-           System.out.println(myRow);
-           
-          } catch(SQLException sqle) {
-            sqle.printStackTrace();
-          } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AddForm.class.getName()).log(Level.SEVERE, null, ex);
-       }
-       
-        setVisible(false);
-        new formUI(1).setVisible(true);
-           } else {
-                JOptionPane.showMessageDialog(null, "Taking you back to main form. Nothing was changed.");
-                setVisible(false);
-                new formUI(1).setVisible(true);  
+      String response = JOptionPane.showInputDialog("Are you sure you want to edit item ID #" + myRow + "? Press y to confirm or n to cancel").toLowerCase().trim();
+      if ("y".equals(response) || "yes".equals(response)) {
+      if (!"".equals(jTextField1.getText())) {
+        if (!"".equals(jTextField4.getText())) {
+            if (!"".equals(jTextField3.getText())){
+               if (!"".equals(jTextField5.getText())) {
+                    if (!"".equals(jTextField2.getText())) {
+                        Class.forName("org.apache.derby.jdbc.ClientDriver");
+                        con = DriverManager.getConnection("jdbc:derby://localhost:1527/Parts", "parts", "password");
+                        pstmt = con.prepareStatement("UPDATE INVENTORY SET id = ?, quantity = ?, price = ?, purchase_date = ?, description = ? WHERE id = ?");
+                        pstmt.setString(1, jTextField1.getText());
+                        pstmt.setString(2, jTextField3.getText());
+                        pstmt.setString(3, jTextField4.getText());
+                        pstmt.setString(4, jTextField5.getText());
+                        pstmt.setString(5, jTextField2.getText()); 
+                        pstmt.setString(6, myRow);
+                        pstmt.executeUpdate();
+                        JOptionPane.showMessageDialog(null, "Data Saved");
+                        System.out.println(myRow);
+
+                         setVisible(false);
+                         new formUI(1).setVisible(true);
+
+                                     
+                            } else {
+                            JOptionPane.showMessageDialog(null, "You *MUST* enter an item description.");
+                    }
+                  } else {
+                      JOptionPane.showMessageDialog(null, "You *MUST* enter a purchase date.");
+                  }
+              } else {
+                  JOptionPane.showMessageDialog(null, "You *MUST* enter an item quantity.");
+              }
+            } else {
+              JOptionPane.showMessageDialog(null, "You *MUST* enter an item price.");
             }
+      } else {
+          JOptionPane.showMessageDialog(null, "You *MUST* enter an ID.");
+      }
+} else {
+    JOptionPane.showMessageDialog(null, "Cancelled.");
+}
+      } catch(SQLException sqle) {
+JOptionPane.showMessageDialog(null, "Your ID of " + jTextField1.getText() + " has already been taken.");  
+                new editform().setVisible(true);     
+        } catch (ClassNotFoundException ex) {
+          Logger.getLogger(AddForm.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Cancelled.");   
+        }
+finally {
+
+    try {
+    con.close();
+    pstmt.close();
+    this.dispose();
+    } catch(SQLException sqle) {
+      
+
+        } catch (Exception e) {
+           // Intentionally blank, as to avoid a repeat.
+        }
+     }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -268,8 +293,6 @@ public class editform extends javax.swing.JFrame {
         new formUI(1).setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-
-        
     /**
      * @param args the command line arguments
      */
@@ -300,7 +323,8 @@ public class editform extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new editform().setVisible(true);           
+                new editform().setVisible(true);      
+                
             }
         });
     }

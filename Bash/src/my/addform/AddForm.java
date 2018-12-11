@@ -4,19 +4,14 @@
  * and open the template in the editor.
  */
 package my.addform;
-
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import my.formui.formUI;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-        
-
         
 public class AddForm extends javax.swing.JFrame {
     public AddForm() {  
@@ -204,54 +199,70 @@ public class AddForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField3ActionPerformed
 
     private void cmd_confirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmd_confirmActionPerformed
-       
       String id = jTextField1.getText();
       String quant = jTextField3.getText();
       String price = jTextField4.getText();
       String pd = jTextField5.getText();
       String des = jTextField2.getText();
-       
       Connection con = null;
       PreparedStatement pstmt = null; 
+      /**
+       * Grammar fixed in the code for delete as well.
+       */
       
-       try {
-           Class.forName("org.apache.derby.jdbc.ClientDriver");
-           con = DriverManager.getConnection("jdbc:derby://localhost:1527/Parts", "parts", "password");
-           
-           pstmt = con.prepareStatement("insert into Inventory (id, quantity, price, purchase_date, description) VALUES (?, ?, ?, ?, ?)");
-           pstmt.setString(1, id);
-           pstmt.setString(2, quant);
-           pstmt.setString(3, price);
-           pstmt.setString(4, pd);
-           pstmt.setString(5, des); 
-           pstmt.executeUpdate();
-           JOptionPane.showMessageDialog(null, "Data Saved");
-           
-        setVisible(false);
-        new formUI(1).setVisible(true);
-          } catch(SQLException sqle) {
-            sqle.printStackTrace();
-          } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AddForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-       finally{
-    
-   try {
-      con.close();
-      pstmt.close();
-      this.dispose();
-   } catch(SQLException sqle) {
-       sqle.printStackTrace();
-   }
-       
-        
-         
- 
-            
-    
-       
-       }
-               
+      if (!"".equals(jTextField1.getText())) {
+        if (!"".equals(jTextField4.getText())) {
+            if (!"".equals(jTextField3.getText())){
+               if (!"".equals(jTextField5.getText())) {
+                    if (!"".equals(jTextField2.getText())) {
+                        try {
+                            Class.forName("org.apache.derby.jdbc.ClientDriver");
+                            con = DriverManager.getConnection("jdbc:derby://localhost:1527/Parts", "parts", "password");
+
+                            pstmt = con.prepareStatement("insert into Inventory (id, quantity, price, purchase_date, description) VALUES (?, ?, ?, ?, ?)");
+                            pstmt.setString(1, id);
+                            pstmt.setString(2, quant);
+                            pstmt.setString(3, price);
+                            pstmt.setString(4, pd);
+                            pstmt.setString(5, des); 
+                            pstmt.executeUpdate();
+                            JOptionPane.showMessageDialog(null, "Data Saved");
+
+                            setVisible(false);
+                            new formUI(1).setVisible(true);
+                            } catch(SQLException sqle) {
+                             JOptionPane.showMessageDialog(null, "The ID of " + jTextField1.getText() + " is already taken.");
+                                            new AddForm().setVisible(true);    
+                            } catch (ClassNotFoundException ex) {
+                             Logger.getLogger(AddForm.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (NullPointerException e) {
+                                JOptionPane.showMessageDialog(null, "Cancelled.");
+                            }
+                            finally{
+
+                            try {
+                            con.close();
+                            pstmt.close();
+                            this.dispose();
+                            } catch(SQLException sqle) {
+                            sqle.printStackTrace();
+                            }
+                         }         
+                       } else {
+                           JOptionPane.showMessageDialog(null, "You *MUST* enter an item description.");
+                       }
+                  } else {
+                      JOptionPane.showMessageDialog(null, "You *MUST* enter a purchase date.");
+                  }
+              } else {
+                  JOptionPane.showMessageDialog(null, "You *MUST* enter an item quantity.");
+              }
+            } else {
+              JOptionPane.showMessageDialog(null, "You *MUST* enter an item price.");
+          }
+      } else {
+          JOptionPane.showMessageDialog(null, "You *MUST* enter an ID.");
+      }
        
     }//GEN-LAST:event_cmd_confirmActionPerformed
 
